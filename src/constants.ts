@@ -160,9 +160,17 @@ export const MF_TASKS: MindfuelTask[] = [
   { id: 7, title: 'Ad structure fixing', cat: 'Marketing' },
   { id: 9, title: 'Content idea generation', cat: 'Content' },
   { id: 10, title: 'Peanut butter inventory software', cat: 'Tech' },
-  { id: 14, title: 'Send order list to factory (2:00 PM)', cat: 'Operations' },
-  { id: 15, title: 'Send order list to factory (8:00 PM)', cat: 'Operations' },
-  { id: 16, title: 'Send order list to factory (9:40 PM)', cat: 'Operations' },
+];
+
+export const PERSONAL_TASKS: MindfuelTask[] = [
+  { id: 1, title: 'Video Editing — Learn & practice editing style', cat: 'Creative' },
+  { id: 2, title: '📹 Food Page Posts — 3 per week (create + upload)', cat: 'Content' },
+  { id: 3, title: '🎥 Personal Reel — 1 per week (shoot + edit)', cat: 'Content' },
+  { id: 4, title: '📺 Informative Video — Watch 1 daily + take notes', cat: 'Learning' },
+  { id: 5, title: '🗣️ Voice & Talking Practice — Daily 30 min', cat: 'Skill' },
+  { id: 6, title: '📝 Session: 5–9 PM — Dedicated work block', cat: 'Focus' },
+  { id: 7, title: '☕ No distractions — Social media max 1hr/day', cat: 'Discipline' },
+  { id: 8, title: '📊 Review weekly — Friday planning session', cat: 'Planning' },
 ];
 
 export const HABITS: Habit[] = [

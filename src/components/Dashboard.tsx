@@ -105,78 +105,46 @@ export default function Dashboard({ mfDone, habitDone, waterCount, setWaterCount
 
   return (
     <div className="space-y-6 pb-12">
-      <header className="flex items-center justify-between mb-2">
-        <div>
-          <h1 className="text-5xl font-black leading-tight tracking-tighter bg-gradient-to-br from-white via-white to-white/40 bg-clip-text text-transparent drop-shadow-sm">
-            {greeting}, <span className="text-accent">Sazen</span>
-          </h1>
-          <p className="text-sm font-bold text-text-secondary mt-2 tracking-tight flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-success animate-pulse shadow-[0_0_10px_rgba(62,207,142,0.6)]" />
-            Student ID: 0152330155 · UIU Spring 2026 · Session 261
-          </p>
-          
-          {isExamMode && (
-            <div className="mt-4 px-4 py-2 rounded-2xl bg-danger/20 border border-danger/30 text-danger text-[10px] font-black uppercase tracking-widest flex items-center gap-3 w-fit animate-pulse">
-              <AlertTriangle size={14} />
-              Exam Mode Active — Schedule Optimized
-            </div>
-          )}
-          
-          <div className="flex flex-wrap gap-2 mt-6">
-            {[
-              { label: 'Habits', icon: <CheckCircle2 size={14} />, page: 'habits', color: '#3ecf8e' },
-              { label: 'Goals', icon: <Target size={14} />, page: 'goals', color: '#f5a623' },
-              { label: 'Finance', icon: <Wallet size={14} />, page: 'finance', color: '#7c6ff7' },
-              { label: 'Workout', icon: <Dumbbell size={14} />, page: 'workout', color: '#e865a0' },
-              { label: 'To-Do', icon: <Lightbulb size={14} />, page: 'todos', color: '#f06a50' },
-              { label: 'Shopping', icon: <Droplets size={14} />, page: 'shopping', color: '#4a9eff' },
-            ].map((action) => (
-              <button
-                key={action.label}
-                onClick={() => setActivePage(action.page)}
-                className="glass bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 px-4 py-2 rounded-2xl flex items-center gap-2.5 transition-all duration-300 group active:scale-95"
-              >
-                <div className="group-hover:scale-110 transition-transform" style={{ color: action.color }}>
-                  {action.icon}
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-white/80 group-hover:text-white transition-colors">
-                  {action.label}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className="flex flex-col gap-2">
+        <h1 className="text-5xl font-black leading-tight tracking-tighter bg-gradient-to-br from-text-primary via-text-primary to-text-primary/40 bg-clip-text text-transparent drop-shadow-sm">
+          {greeting}, <span className="text-accent">Sazen</span>
+        </h1>
+        <p className="text-sm font-bold text-text-secondary tracking-tight flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-success animate-pulse shadow-[0_0_10px_rgba(62,207,142,0.6)]" />
+          Student ID: 0152330155 · UIU Spring 2026 · Session 261
+        </p>
         
-        <div className="relative w-24 h-24 flex items-center justify-center glass rounded-full p-1 shadow-2xl shadow-accent/10 group overflow-hidden">
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-accent/20 to-teal-custom/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          <div className="w-full h-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={38}
-                  outerRadius={46}
-                  paddingAngle={0}
-                  dataKey="value"
-                  stroke="none"
-                  startAngle={90}
-                  endAngle={-270}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
+        {isExamMode && (
+          <div className="mt-2 px-4 py-2 rounded-2xl bg-danger/20 border border-danger/30 text-danger text-[10px] font-black uppercase tracking-widest flex items-center gap-3 w-fit animate-pulse">
+            <AlertTriangle size={14} />
+            Exam Mode Active — Schedule Optimized
           </div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-base font-black text-white tracking-tighter">{completionPct}%</span>
-            <span className="text-[8px] font-black text-text-tertiary uppercase tracking-widest">Done</span>
-          </div>
+        )}
+        
+        <div className="flex flex-wrap gap-2 mt-4">
+          {[
+            { label: 'Habits', icon: <CheckCircle2 size={14} />, page: 'habits', color: '#3ecf8e' },
+            { label: 'Goals', icon: <Target size={14} />, page: 'goals', color: '#f5a623' },
+            { label: 'Finance', icon: <Wallet size={14} />, page: 'finance', color: '#7c6ff7' },
+            { label: 'Workout', icon: <Dumbbell size={14} />, page: 'workout', color: '#e865a0' },
+            { label: 'To-Do', icon: <Lightbulb size={14} />, page: 'todos', color: '#f06a50' },
+            { label: 'Shopping', icon: <Droplets size={14} />, page: 'shopping', color: '#4a9eff' },
+          ].map((action) => (
+            <button
+              key={action.label}
+              onClick={() => setActivePage(action.page)}
+              className="glass bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 px-4 py-2 rounded-2xl flex items-center gap-2.5 transition-all duration-300 group active:scale-95"
+            >
+              <div className="group-hover:scale-110 transition-transform" style={{ color: action.color }}>
+                {action.icon}
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-widest text-text-secondary group-hover:text-text-primary transition-colors">
+                {action.label}
+              </span>
+            </button>
+          ))}
         </div>
-      </header>
+      </div>
 
       {/* Quote Section */}
       <div className="glass bg-white/5 border border-white/10 rounded-[32px] p-6 text-center shadow-xl relative overflow-hidden group">

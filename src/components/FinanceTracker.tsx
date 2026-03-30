@@ -215,7 +215,7 @@ export default function FinanceTracker({
     <div className="space-y-10 pb-20">
       <header className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-4xl font-black leading-tight tracking-tighter bg-gradient-to-br from-white to-white/60 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-black leading-tight tracking-tighter bg-gradient-to-br from-text-primary to-text-primary/60 bg-clip-text text-transparent">
             Finance
           </h1>
           <p className="text-sm font-bold text-text-secondary mt-1 tracking-tight">Track your daily flow</p>

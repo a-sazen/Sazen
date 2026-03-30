@@ -19,7 +19,7 @@ export default function Todos({ todos, todoDone, toggleTodo, addTodo, removeTodo
     <div className="space-y-8">
       <header className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-4xl font-black leading-tight tracking-tighter bg-gradient-to-br from-white via-white to-white/40 bg-clip-text text-transparent drop-shadow-sm">
+          <h1 className="text-4xl font-black leading-tight tracking-tighter bg-gradient-to-br from-text-primary via-text-primary to-text-primary/40 bg-clip-text text-transparent drop-shadow-sm">
             To-Dos & Errands
           </h1>
           <p className="text-sm font-bold text-text-secondary mt-2 tracking-tight flex items-center gap-2">

@@ -24,7 +24,7 @@ import {
   Briefcase
 } from 'lucide-react';
 
-import { DAYS, FULL_DAYS, NOTICES, QUOTES, HABITS, GOALS_DATA, TODOS_HOME, TODOS_OUTSIDE, SHOPPING } from './constants';
+import { DAYS, FULL_DAYS, NOTICES, QUOTES, HABITS, GOALS_DATA, TODOS_HOME, TODOS_OUTSIDE, SHOPPING, SCHEDULE, MF_TASKS, PERSONAL_TASKS } from './constants';
 import { Toaster } from 'sonner';
 import Dashboard from './components/Dashboard';
 import TodayPlan from './components/TodayPlan';
@@ -41,7 +41,7 @@ import WorkoutLog from './components/WorkoutLog';
 import FinanceTracker from './components/FinanceTracker';
 import { Exam, WorkoutSession, BodyMeasurement, Goal, Habit, Transaction, Account, Budget, SavingsGoal, Todo, ShoppingItem } from './types';
 
-type Page = 'dashboard' | 'today' | 'weekly' | 'schedule' | 'work' | 'habits' | 'goals' | 'todos' | 'shopping' | 'exams' | 'pomodoro' | 'workout' | 'finance';
+type Page = 'dashboard' | 'today' | 'weekly' | 'schedule' | 'mindfuel-work' | 'personal-work' | 'habits' | 'goals' | 'todos' | 'shopping' | 'exams' | 'pomodoro' | 'workout' | 'finance';
 
 export default function App() {
   const [activePage, setActivePage] = useState<Page>('dashboard');
@@ -49,6 +49,7 @@ export default function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [waterCount, setWaterCount] = useState(() => parseInt(localStorage.getItem('water_count') || '0'));
   const [mfDone, setMfDone] = useState<number[]>(() => JSON.parse(localStorage.getItem('mf_done') || '[]'));
+  const [personalDone, setPersonalDone] = useState<string[]>(() => JSON.parse(localStorage.getItem('personal_done') || '[]'));
   const [habitDone, setHabitDone] = useState<Record<string, Record<string, boolean>>>(() => JSON.parse(localStorage.getItem('habit_done') || '{}'));
   const [todoDone, setTodoDone] = useState<string[]>(() => JSON.parse(localStorage.getItem('todo_done') || '[]'));
   const [shopDone, setShopDone] = useState<string[]>(() => JSON.parse(localStorage.getItem('shop_done') || '[]'));
@@ -103,6 +104,41 @@ export default function App() {
     return saved ? JSON.parse(saved) : {};
   });
 
+  const [classSchedule, setClassSchedule] = useState<Record<string, any[]>>(() => JSON.parse(localStorage.getItem('class_schedule') || JSON.stringify(SCHEDULE)));
+  const [mfTasks, setMfTasks] = useState<any[]>(() => {
+    const saved = localStorage.getItem('mf_tasks');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Filter out the "send order list to factory" tasks as requested
+      return parsed.filter((t: any) => !t.title.toLowerCase().includes('send order list to factory'));
+    }
+    return MF_TASKS;
+  });
+  const [personalTasks, setPersonalTasks] = useState<any[]>(() => {
+    const saved = localStorage.getItem('personal_tasks');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const hasNewTasks = parsed.some((t: any) => t.title.includes('Video Editing'));
+      if (hasNewTasks) return parsed;
+      // Merge defaults with saved tasks, avoiding duplicates by ID
+      const merged = [...PERSONAL_TASKS];
+      parsed.forEach((p: any) => {
+        if (!merged.some(m => m.id === p.id)) {
+          merged.push(p);
+        }
+      });
+      return merged;
+    }
+    return PERSONAL_TASKS;
+  });
+
+  // Force update if the user has an empty list from previous session
+  useEffect(() => {
+    if (personalTasks.length === 0 && PERSONAL_TASKS.length > 0) {
+      setPersonalTasks(PERSONAL_TASKS);
+    }
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
@@ -111,6 +147,7 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('water_count', waterCount.toString());
     localStorage.setItem('mf_done', JSON.stringify(mfDone));
+    localStorage.setItem('personal_done', JSON.stringify(personalDone));
     localStorage.setItem('habit_done', JSON.stringify(habitDone));
     localStorage.setItem('todo_done', JSON.stringify(todoDone));
     localStorage.setItem('shop_done', JSON.stringify(shopDone));
@@ -126,6 +163,9 @@ export default function App() {
     localStorage.setItem('todos', JSON.stringify(todos));
     localStorage.setItem('shopping_items', JSON.stringify(shoppingItems));
     localStorage.setItem('completed_tasks', JSON.stringify(completedTasks));
+    localStorage.setItem('class_schedule', JSON.stringify(classSchedule));
+    localStorage.setItem('mf_tasks', JSON.stringify(mfTasks));
+    localStorage.setItem('personal_tasks', JSON.stringify(personalTasks));
     localStorage.setItem('theme', theme);
     
     if (theme === 'light') {
@@ -133,11 +173,15 @@ export default function App() {
     } else {
       document.documentElement.classList.remove('light');
     }
-  }, [waterCount, mfDone, habitDone, todoDone, shopDone, habits, goals, exams, workoutSessions, transactions, accounts, budgets, savingsGoals, bodyMeasurements, todos, shoppingItems, completedTasks, theme]);
+  }, [waterCount, mfDone, personalDone, habitDone, todoDone, shopDone, habits, goals, exams, workoutSessions, transactions, accounts, budgets, savingsGoals, bodyMeasurements, todos, shoppingItems, completedTasks, mfTasks, personalTasks, theme]);
 
   const toggleWater = (i: number) => {
     setWaterCount(prev => i < prev ? i : i + 1);
   };
+
+  const totalTasks = mfTasks.length + personalTasks.length;
+  const completedCount = mfDone.length + personalDone.length;
+  const dailyProgress = totalTasks > 0 ? (completedCount / totalTasks) * 100 : 0;
 
   const toggleTask = (dateKey: string, taskId: string) => {
     setCompletedTasks(prev => {
@@ -156,7 +200,8 @@ export default function App() {
     { id: 'schedule', label: 'Class Schedule', icon: BookOpen, section: 'Main' },
     { id: 'exams', label: 'Exam Tracker', icon: GraduationCap, section: 'Academic' },
     { id: 'pomodoro', label: 'Study Timer', icon: Timer, section: 'Academic' },
-    { id: 'work', label: 'Work', icon: Briefcase, section: 'Work & Goals' },
+    { id: 'mindfuel-work', label: 'Mindfuel Work', icon: Briefcase, section: 'Work & Goals' },
+    { id: 'personal-work', label: 'Personal Work', icon: Briefcase, section: 'Work & Goals' },
     { id: 'habits', label: 'Habit Tracker', icon: CheckCircle2, section: 'Life' },
     { id: 'goals', label: 'Goals', icon: Target, section: 'Life' },
     { id: 'workout', label: 'Workout Log', icon: Dumbbell, section: 'Life' },
@@ -187,10 +232,28 @@ export default function App() {
         toggleTask={toggleTask} 
       />;
       case 'weekly': return <WeeklyView />;
-      case 'schedule': return <ClassSchedule />;
+      case 'schedule': return <ClassSchedule 
+        schedule={classSchedule} 
+        setSchedule={setClassSchedule} 
+      />;
       case 'exams': return <ExamTracker exams={exams} addExam={e => setExams(prev => [...prev, { ...e, id: Math.random().toString(36).substr(2, 9) }])} removeExam={id => setExams(prev => prev.filter(e => e.id !== id))} />;
       case 'pomodoro': return <Pomodoro />;
-      case 'work': return <MindfuelWork mfDone={mfDone} toggleMf={(id) => setMfDone(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id])} />;
+      case 'mindfuel-work': return <MindfuelWork 
+        title="Mindfuel Work"
+        tasks={mfTasks}
+        doneIds={mfDone}
+        toggleTask={(id) => setMfDone(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id])}
+        addTask={(t) => setMfTasks(prev => [...prev, { ...t, id: Math.max(0, ...prev.map(x => x.id)) + 1 }])}
+        removeTask={(id) => setMfTasks(prev => prev.filter(x => x.id !== id))}
+      />;
+      case 'personal-work': return <MindfuelWork 
+        title="Personal Work"
+        tasks={personalTasks}
+        doneIds={personalDone.map(Number)}
+        toggleTask={(id) => setPersonalDone(prev => prev.includes(id.toString()) ? prev.filter(i => i !== id.toString()) : [...prev, id.toString()])}
+        addTask={(t) => setPersonalTasks(prev => [...prev, { ...t, id: Math.max(0, ...prev.map(x => x.id)) + 1 }])}
+        removeTask={(id) => setPersonalTasks(prev => prev.filter(x => x.id !== id))}
+      />;
       case 'habits': return <HabitTracker habits={habits} habitDone={habitDone} toggleHabit={(hn, date) => setHabitDone(prev => {
         const newHabits = { ...prev };
         if (!newHabits[date]) newHabits[date] = {};
@@ -290,24 +353,6 @@ export default function App() {
           </div>
           <div className="text-[10px] font-bold text-text-tertiary uppercase tracking-[0.3em] mt-1">Daily OS</div>
         </div>
-
-        <div className="px-6 py-4 border-b border-white/5">
-          <button 
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="w-full flex items-center justify-between px-4 py-3 rounded-2xl glass bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
-          >
-            <div className="flex items-center gap-3">
-              {theme === 'dark' ? <Moon size={16} className="text-accent" /> : <Sun size={16} className="text-warning" />}
-              <span className="text-[10px] font-black uppercase tracking-widest text-white/60 group-hover:text-white">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
-            </div>
-            <div className={`w-8 h-4 rounded-full relative transition-colors duration-500 ${theme === 'dark' ? 'bg-accent/40' : 'bg-warning/40'}`}>
-              <motion.div 
-                animate={{ x: theme === 'dark' ? 16 : 0 }}
-                className="absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white shadow-sm"
-              />
-            </div>
-          </button>
-        </div>
         
         <div className="p-6 border-b border-white/5">
           <div className="font-display text-3xl font-black text-white tracking-tighter">
@@ -332,8 +377,8 @@ export default function App() {
                     }}
                     className={`w-full flex items-center gap-4 px-5 py-4 rounded-[24px] transition-all duration-500 group relative overflow-hidden ${
                       activePage === item.id 
-                        ? 'glass bg-accent/20 border-accent/30 text-white shadow-xl shadow-accent/20' 
-                        : 'text-white/30 hover:text-white hover:bg-white/5'
+                        ? 'glass bg-accent/20 border-accent/30 text-accent shadow-xl shadow-accent/20' 
+                        : 'text-text-tertiary hover:text-text-primary hover:bg-white/5'
                     }`}
                   >
                     {activePage === item.id && (
@@ -357,6 +402,71 @@ export default function App() {
 
       {/* Main Content */}
       <main className="lg:ml-64 flex-1 min-h-screen relative pt-16 lg:pt-0">
+        {/* Global Header */}
+        <div className="sticky top-0 z-40 glass border-b border-white/5 px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="lg:hidden w-8" /> {/* Spacer for mobile menu button */}
+            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-text-tertiary">
+              {navItems.find(i => i.id === activePage)?.label}
+            </h2>
+          </div>
+          
+          <div className="flex items-center gap-6">
+            {/* Theme Toggle */}
+            <button 
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="p-2.5 rounded-2xl glass bg-white/5 border border-white/10 hover:bg-white/10 transition-all group relative overflow-hidden"
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={theme}
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -20, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {theme === 'dark' ? <Moon size={18} className="text-accent" /> : <Sun size={18} className="text-warning" />}
+                </motion.div>
+              </AnimatePresence>
+            </button>
+
+            {/* Global Progress */}
+            <div className="flex items-center gap-5 glass bg-white/5 border border-white/10 rounded-3xl px-6 py-4">
+              <div className="relative w-16 h-16 flex items-center justify-center">
+                <svg className="w-full h-full -rotate-90">
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="28"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="5"
+                    className="text-white/5"
+                  />
+                  <motion.circle
+                    cx="32"
+                    cy="32"
+                    r="28"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="5"
+                    strokeDasharray={176}
+                    initial={{ strokeDashoffset: 176 }}
+                    animate={{ strokeDashoffset: 176 - (176 * (dailyProgress / 100)) }}
+                    strokeLinecap="round"
+                    className="text-accent"
+                  />
+                </svg>
+                <span className="absolute text-xs font-black text-text-primary">{Math.round(dailyProgress)}%</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.2em] leading-none">Daily</span>
+                <span className="text-[14px] font-black text-text-primary leading-none mt-1">Progress</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="p-4 md:p-8 max-w-7xl mx-auto">
           <AnimatePresence mode="wait">
             <motion.div

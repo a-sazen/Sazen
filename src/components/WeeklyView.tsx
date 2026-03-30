@@ -14,8 +14,8 @@ export default function WeeklyView() {
   return (
     <div className="space-y-10">
       <header>
-        <h1 className="text-4xl font-black tracking-tight leading-tight">Weekly Overview</h1>
-        <p className="text-sm font-black uppercase tracking-[0.2em] text-white/30 mt-2">Spring 2026 · Session 261</p>
+        <h1 className="text-4xl font-black tracking-tight leading-tight text-text-primary">Weekly Overview</h1>
+        <p className="text-sm font-black uppercase tracking-[0.2em] text-text-tertiary mt-2">Spring 2026 · Session 261</p>
       </header>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
@@ -41,7 +41,7 @@ export default function WeeklyView() {
               {isToday && (
                 <div className="absolute top-0 right-0 w-16 h-16 bg-accent/20 blur-2xl rounded-full -mr-8 -mt-8 animate-pulse" />
               )}
-              <div className={`text-[11px] font-black uppercase tracking-widest mb-4 flex items-center gap-2 ${isToday ? 'text-accent' : isUni ? 'text-blue-custom' : 'text-white/30'}`}>
+              <div className={`text-[11px] font-black uppercase tracking-widest mb-4 flex items-center gap-2 ${isToday ? 'text-accent' : isUni ? 'text-blue-custom' : 'text-text-tertiary'}`}>
                 {d}
                 {isToday && (
                   <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
