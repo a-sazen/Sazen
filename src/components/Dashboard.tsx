@@ -108,7 +108,7 @@ export default function Dashboard({ mfDone, habitDone, waterCount, setWaterCount
       <header className="flex items-center justify-between mb-2">
         <div>
           <h1 className="text-5xl font-black leading-tight tracking-tighter bg-gradient-to-br from-white via-white to-white/40 bg-clip-text text-transparent drop-shadow-sm">
-            Good {greeting}, <span className="text-accent">Sazen</span>
+            {greeting}, <span className="text-accent">Sazen</span>
           </h1>
           <p className="text-sm font-bold text-text-secondary mt-2 tracking-tight flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-success animate-pulse shadow-[0_0_10px_rgba(62,207,142,0.6)]" />
@@ -147,29 +147,31 @@ export default function Dashboard({ mfDone, habitDone, waterCount, setWaterCount
           </div>
         </div>
         
-        <div className="relative w-24 h-24 flex items-center justify-center glass rounded-full p-1 shadow-2xl shadow-accent/10 group">
+        <div className="relative w-24 h-24 flex items-center justify-center glass rounded-full p-1 shadow-2xl shadow-accent/10 group overflow-hidden">
           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-accent/20 to-teal-custom/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                innerRadius={35}
-                outerRadius={45}
-                paddingAngle={0}
-                dataKey="value"
-                stroke="none"
-                startAngle={90}
-                endAngle={-270}
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="w-full h-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={38}
+                  outerRadius={46}
+                  paddingAngle={0}
+                  dataKey="value"
+                  stroke="none"
+                  startAngle={90}
+                  endAngle={-270}
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <span className="text-base font-black text-white tracking-tighter">{completionPct}%</span>
             <span className="text-[8px] font-black text-text-tertiary uppercase tracking-widest">Done</span>
           </div>
@@ -262,7 +264,7 @@ export default function Dashboard({ mfDone, habitDone, waterCount, setWaterCount
           </div>
           <div className="text-[9px] text-text-secondary mt-3 font-bold tracking-tight flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-blue-custom" />
-            Goal: 3 glasses (1.5L)
+            Goal: 3 Liters
           </div>
         </div>
 

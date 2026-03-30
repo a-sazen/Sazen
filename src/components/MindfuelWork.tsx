@@ -13,7 +13,7 @@ export default function MindfuelWork({ mfDone, toggleMf }: MindfuelWorkProps) {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-3xl font-extrabold leading-tight">Mindfuel Work</h1>
+        <h1 className="text-3xl font-extrabold leading-tight">Work</h1>
         <p className="text-sm text-text-secondary mt-1">Evening work sessions · 5:00 PM – 9:00 PM</p>
       </header>
 

@@ -106,7 +106,18 @@ export default function FinanceTracker({
 
   const handleAddTransaction = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !amount || !accountId) return;
+    if (!title) {
+      toast.error('Please enter a description');
+      return;
+    }
+    if (!amount || parseFloat(amount) <= 0) {
+      toast.error('Please enter a valid amount');
+      return;
+    }
+    if (!accountId) {
+      toast.error('Please select an account');
+      return;
+    }
     const val = parseFloat(amount);
     
     // Combine date and time
@@ -531,21 +542,21 @@ export default function FinanceTracker({
               animate={{ y: 0, scale: 1, opacity: 1 }}
               exit={{ y: '100%', scale: 0.95, opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-lg glass bg-white/10 border border-white/20 rounded-[40px] p-10 shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar"
+              className="relative w-full max-w-md glass bg-white/10 border border-white/20 rounded-[32px] p-8 shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar"
             >
-              <div className="flex items-center justify-between mb-10">
-                <h2 className="text-3xl font-black tracking-tighter text-white">New Transaction</h2>
-                <button onClick={() => setShowAdd(false)} className="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/5 text-text-tertiary hover:text-white hover:bg-white/10 transition-all active:scale-90">
-                  <X size={24} />
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-black tracking-tighter text-white">New Transaction</h2>
+                <button onClick={() => setShowAdd(false)} className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 text-text-tertiary hover:text-white hover:bg-white/10 transition-all active:scale-90">
+                  <X size={20} />
                 </button>
               </div>
 
-              <form onSubmit={handleAddTransaction} className="space-y-8">
-                <div className="flex gap-2 p-1.5 glass rounded-[24px] bg-white/5">
+              <form onSubmit={handleAddTransaction} className="space-y-6">
+                <div className="flex gap-2 p-1 glass rounded-[20px] bg-white/5">
                   <button
                     type="button"
                     onClick={() => setType('expense')}
-                    className={`flex-1 py-4 text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl transition-all duration-300 ${
+                    className={`flex-1 py-3 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl transition-all duration-300 ${
                       type === 'expense' ? 'bg-danger text-white shadow-lg shadow-danger/20 scale-105' : 'text-text-tertiary hover:text-white'
                     }`}
                   >
@@ -554,7 +565,7 @@ export default function FinanceTracker({
                   <button
                     type="button"
                     onClick={() => setType('income')}
-                    className={`flex-1 py-4 text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl transition-all duration-300 ${
+                    className={`flex-1 py-3 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl transition-all duration-300 ${
                       type === 'income' ? 'bg-success text-white shadow-lg shadow-success/20 scale-105' : 'text-text-tertiary hover:text-white'
                     }`}
                   >
@@ -562,87 +573,87 @@ export default function FinanceTracker({
                   </button>
                 </div>
 
-                <div className="space-y-3">
-                  <label className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.4em] px-2">Amount</label>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-text-tertiary uppercase tracking-[0.3em] px-2">Amount</label>
                   <div className="relative group">
-                    <span className="absolute left-6 top-1/2 -translate-y-1/2 text-3xl font-black text-text-tertiary group-focus-within:text-accent transition-colors">৳</span>
+                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-2xl font-black text-text-tertiary group-focus-within:text-accent transition-colors">৳</span>
                     <input 
                       autoFocus
                       type="number" 
                       value={amount}
                       onChange={e => setAmount(e.target.value)}
                       placeholder="0"
-                      className="w-full glass bg-white/5 border border-white/10 rounded-[24px] pl-14 pr-6 py-7 text-5xl font-black text-white focus:border-accent/50 focus:bg-white/10 outline-none transition-all shadow-inner tracking-tighter"
+                      className="w-full glass bg-white/5 border border-white/10 rounded-[20px] pl-12 pr-6 py-4 text-3xl font-black text-white focus:border-accent/50 focus:bg-white/10 outline-none transition-all shadow-inner tracking-tighter"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <label className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.4em] px-2">Description</label>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-text-tertiary uppercase tracking-[0.3em] px-2">Description</label>
                   <input 
                     type="text" 
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                     placeholder="What's this for?"
-                    className="w-full glass bg-white/5 border border-white/10 rounded-[24px] px-6 py-5 text-base font-bold text-white focus:border-accent/50 focus:bg-white/10 outline-none transition-all shadow-inner"
+                    className="w-full glass bg-white/5 border border-white/10 rounded-[20px] px-5 py-3.5 text-sm font-bold text-white focus:border-accent/50 focus:bg-white/10 outline-none transition-all shadow-inner"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.4em] px-2">Date</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-text-tertiary uppercase tracking-[0.3em] px-2">Date</label>
                     <input 
                       type="date" 
                       value={transactionDate}
                       onChange={e => setTransactionDate(e.target.value)}
-                      className="w-full glass bg-white/5 border border-white/10 rounded-[24px] px-6 py-5 text-sm font-bold text-white focus:border-accent/50 focus:bg-white/10 outline-none transition-all shadow-inner"
+                      className="w-full glass bg-white/5 border border-white/10 rounded-[20px] px-5 py-3.5 text-xs font-bold text-white focus:border-accent/50 focus:bg-white/10 outline-none transition-all shadow-inner"
                     />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.4em] px-2">Time</label>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-text-tertiary uppercase tracking-[0.3em] px-2">Time</label>
                     <input 
                       type="time" 
                       value={transactionTime}
                       onChange={e => setTransactionTime(e.target.value)}
-                      className="w-full glass bg-white/5 border border-white/10 rounded-[24px] px-6 py-5 text-sm font-bold text-white focus:border-accent/50 focus:bg-white/10 outline-none transition-all shadow-inner"
+                      className="w-full glass bg-white/5 border border-white/10 rounded-[20px] px-5 py-3.5 text-xs font-bold text-white focus:border-accent/50 focus:bg-white/10 outline-none transition-all shadow-inner"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <label className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.4em] px-2">Account</label>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-text-tertiary uppercase tracking-[0.3em] px-2">Account</label>
                   <div className="relative">
                     <select 
                       value={accountId}
                       onChange={e => setAccountId(e.target.value)}
-                      className="w-full glass bg-white/5 border border-white/10 rounded-[24px] px-6 py-5 text-sm font-bold text-white focus:border-accent/50 focus:bg-white/10 outline-none transition-all appearance-none shadow-inner"
+                      className="w-full glass bg-white/5 border border-white/10 rounded-[20px] px-5 py-3.5 text-xs font-bold text-white focus:border-accent/50 focus:bg-white/10 outline-none transition-all appearance-none shadow-inner"
                     >
                       {accounts.map(a => (
                         <option key={a.id} value={a.id} className="bg-[#1a1a1a] text-white">{a.name} (৳{a.balance.toLocaleString()})</option>
                       ))}
                     </select>
-                    <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-text-tertiary">
-                      <ChevronDown size={18} />
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-text-tertiary">
+                      <ChevronDown size={16} />
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <label className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.4em] px-2">Category</label>
-                  <div className="grid grid-cols-3 gap-3">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-text-tertiary uppercase tracking-[0.3em] px-2">Category</label>
+                  <div className="grid grid-cols-3 gap-2">
                     {filteredCategories.map(c => (
                       <button
                         key={c.name}
                         type="button"
                         onClick={() => setCategory(c.name)}
-                        className={`flex flex-col items-center gap-3 p-4 rounded-[24px] border transition-all duration-300 ${
+                        className={`flex flex-col items-center gap-1.5 p-3 rounded-[20px] border transition-all duration-300 ${
                           category === c.name 
                             ? 'bg-accent/20 border-accent text-accent shadow-lg shadow-accent/20 scale-105' 
                             : 'glass bg-white/5 border-white/10 text-text-tertiary hover:border-white/30 hover:text-white'
                         }`}
                       >
-                        <span className="text-2xl">{c.icon}</span>
-                        <span className="text-[10px] font-black uppercase tracking-widest">{c.name}</span>
+                        <span className="text-xl">{c.icon}</span>
+                        <span className="text-[9px] font-black uppercase tracking-widest">{c.name}</span>
                       </button>
                     ))}
                   </div>
@@ -650,7 +661,7 @@ export default function FinanceTracker({
 
                 <button 
                   type="submit"
-                  className={`w-full text-white font-black py-6 rounded-[32px] text-xl shadow-2xl transition-all duration-300 mt-6 hover:scale-[1.02] active:scale-95 ${
+                  className={`w-full text-white font-black py-4 rounded-[24px] text-lg shadow-2xl transition-all duration-300 mt-4 hover:scale-[1.02] active:scale-95 ${
                     type === 'income' ? 'bg-success shadow-success/30' : 'bg-accent shadow-accent/30'
                   }`}
                 >

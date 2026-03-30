@@ -19,7 +19,7 @@ export default function Todos({ todos, todoDone, toggleTodo, addTodo, removeTodo
     <div className="space-y-8">
       <header className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-5xl font-black leading-tight tracking-tighter bg-gradient-to-br from-white via-white to-white/40 bg-clip-text text-transparent drop-shadow-sm">
+          <h1 className="text-4xl font-black leading-tight tracking-tighter bg-gradient-to-br from-white via-white to-white/40 bg-clip-text text-transparent drop-shadow-sm">
             To-Dos & Errands
           </h1>
           <p className="text-sm font-bold text-text-secondary mt-2 tracking-tight flex items-center gap-2">
@@ -109,18 +109,18 @@ export default function Todos({ todos, todoDone, toggleTodo, addTodo, removeTodo
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <div className="space-y-10">
+        <div className="space-y-8">
           <section>
-            <h3 className="text-[11px] font-black text-white/30 uppercase tracking-[0.3em] px-4 mb-5 flex items-center gap-2">
+            <h3 className="text-[11px] font-black text-white/30 uppercase tracking-[0.3em] px-4 mb-4 flex items-center gap-2">
               🏠 Do at Home
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {todos.filter(t => t.category === 'home').map((t) => {
                 const done = todoDone.includes(t.id);
                 return (
-                  <div 
+                   <div 
                     key={t.id}
-                    className={`flex items-center gap-5 p-5 rounded-[32px] border transition-all duration-500 group relative overflow-hidden ${
+                    className={`flex items-center gap-4 p-4 rounded-[24px] border transition-all duration-500 group relative overflow-hidden ${
                       done 
                         ? 'bg-white/5 border-white/5 opacity-40' 
                         : 'glass bg-white/5 border border-white/10 hover:border-white/30 hover:bg-white/10 shadow-xl'
@@ -129,20 +129,20 @@ export default function Todos({ todos, todoDone, toggleTodo, addTodo, removeTodo
                     <div className="absolute -top-12 -right-12 w-24 h-24 bg-white/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     <div 
                       onClick={() => toggleTodo(t.id)}
-                      className="flex items-center gap-5 flex-1 cursor-pointer select-none relative z-10"
+                      className="flex items-center gap-4 flex-1 cursor-pointer select-none relative z-10"
                     >
-                      <div className={`w-7 h-7 rounded-[12px] border-2 flex items-center justify-center transition-all duration-500 ${
+                      <div className={`w-6 h-6 rounded-[10px] border-2 flex items-center justify-center transition-all duration-500 ${
                         done ? 'bg-accent border-accent shadow-lg shadow-accent/30 scale-90' : 'border-white/20 bg-white/5 group-hover:border-white/40'
                       }`}>
-                        {done && <svg width="14" height="14" viewBox="0 0 10 10" className="animate-in zoom-in duration-300"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                        {done && <svg width="12" height="12" viewBox="0 0 10 10" className="animate-in zoom-in duration-300"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}
                       </div>
-                      <div className={`text-base font-bold tracking-tight transition-all duration-300 ${done ? 'line-through text-white/40' : 'text-white'}`}>{t.text}</div>
+                      <div className={`text-sm font-bold tracking-tight transition-all duration-300 ${done ? 'line-through text-white/40' : 'text-white'}`}>{t.text}</div>
                     </div>
                     <button
                       onClick={() => removeTodo(t.id)}
-                      className="p-3 rounded-2xl text-white/10 hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 relative z-10"
+                      className="p-2 rounded-xl text-white/10 hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 relative z-10"
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 );
@@ -151,16 +151,16 @@ export default function Todos({ todos, todoDone, toggleTodo, addTodo, removeTodo
           </section>
 
           <section>
-            <h3 className="text-[11px] font-black text-white/30 uppercase tracking-[0.3em] px-4 mb-5 flex items-center gap-2">
+            <h3 className="text-[11px] font-black text-white/30 uppercase tracking-[0.3em] px-4 mb-4 flex items-center gap-2">
               📍 Need to Go Outside
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {todos.filter(t => t.category === 'outside').map((t) => {
                 const done = todoDone.includes(t.id);
                 return (
                   <div 
                     key={t.id}
-                    className={`flex items-center gap-5 p-5 rounded-[32px] border transition-all duration-500 group relative overflow-hidden ${
+                    className={`flex items-center gap-4 p-4 rounded-[24px] border transition-all duration-500 group relative overflow-hidden ${
                       done 
                         ? 'bg-white/5 border-white/5 opacity-40' 
                         : 'glass bg-white/5 border border-white/10 hover:border-white/30 hover:bg-white/10 shadow-xl'
@@ -169,20 +169,20 @@ export default function Todos({ todos, todoDone, toggleTodo, addTodo, removeTodo
                     <div className="absolute -top-12 -right-12 w-24 h-24 bg-white/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     <div 
                       onClick={() => toggleTodo(t.id)}
-                      className="flex items-center gap-5 flex-1 cursor-pointer select-none relative z-10"
+                      className="flex items-center gap-4 flex-1 cursor-pointer select-none relative z-10"
                     >
-                      <div className={`w-7 h-7 rounded-[12px] border-2 flex items-center justify-center transition-all duration-500 ${
+                      <div className={`w-6 h-6 rounded-[10px] border-2 flex items-center justify-center transition-all duration-500 ${
                         done ? 'bg-accent border-accent shadow-lg shadow-accent/30 scale-90' : 'border-white/20 bg-white/5 group-hover:border-white/40'
                       }`}>
-                        {done && <svg width="14" height="14" viewBox="0 0 10 10" className="animate-in zoom-in duration-300"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                        {done && <svg width="12" height="12" viewBox="0 0 10 10" className="animate-in zoom-in duration-300"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}
                       </div>
-                      <div className={`text-base font-bold tracking-tight transition-all duration-300 ${done ? 'line-through text-white/40' : 'text-white'}`}>{t.text}</div>
+                      <div className={`text-sm font-bold tracking-tight transition-all duration-300 ${done ? 'line-through text-white/40' : 'text-white'}`}>{t.text}</div>
                     </div>
                     <button
                       onClick={() => removeTodo(t.id)}
-                      className="p-3 rounded-2xl text-white/10 hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 relative z-10"
+                      className="p-2 rounded-xl text-white/10 hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 relative z-10"
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 );
@@ -195,7 +195,7 @@ export default function Todos({ todos, todoDone, toggleTodo, addTodo, removeTodo
           <h3 className="text-[11px] font-black text-white/30 uppercase tracking-[0.3em] px-4 flex items-center gap-2">
             📝 Notes to Self
           </h3>
-          <div className="glass bg-white/5 border border-white/10 rounded-[40px] p-8 text-base text-white/60 leading-relaxed font-medium italic shadow-2xl">
+          <div className="glass bg-white/5 border border-white/10 rounded-[32px] p-6 text-sm text-white/60 leading-relaxed font-medium italic shadow-2xl">
             These are one-time setup tasks. Once done, your routine will run smoothly. Prioritize room arrangement and diet plan first — they affect your daily energy.
           </div>
         </section>

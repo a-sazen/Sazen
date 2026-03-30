@@ -37,6 +37,24 @@
   --radius-liquid: 32px;
 }
 
+.light {
+  --color-bg: #f8f9fa;
+  --color-bg-secondary: rgba(0, 0, 0, 0.03);
+  --color-bg-tertiary: rgba(0, 0, 0, 0.06);
+  --color-bg-quaternary: rgba(0, 0, 0, 0.1);
+  
+  --color-border-subtle: rgba(0, 0, 0, 0.08);
+  --color-border-muted: rgba(0, 0, 0, 0.15);
+  
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: rgba(0, 0, 0, 0.8);
+  --color-text-tertiary: rgba(0, 0, 0, 0.6);
+  
+  --color-accent: #6355e6;
+  --color-accent-light: #8b80f0;
+  --color-accent-dark: #4a3eb3;
+}
+
 @layer base {
   html {
     font-size: 15px;

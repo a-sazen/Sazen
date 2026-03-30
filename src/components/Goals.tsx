@@ -50,7 +50,7 @@ export default function Goals({ goals, addGoal, removeGoal, updateGoalPct }: Goa
     <div className="space-y-10">
       <header className="flex items-center justify-between mb-2">
         <div>
-          <h1 className="text-5xl font-black leading-tight tracking-tighter bg-gradient-to-br from-white via-white to-white/40 bg-clip-text text-transparent drop-shadow-sm">
+          <h1 className="text-4xl font-black leading-tight tracking-tighter bg-gradient-to-br from-white via-white to-white/40 bg-clip-text text-transparent drop-shadow-sm">
             Goals & Progress
           </h1>
           <p className="text-sm font-bold text-text-secondary mt-2 tracking-tight flex items-center gap-2">
@@ -68,7 +68,7 @@ export default function Goals({ goals, addGoal, removeGoal, updateGoalPct }: Goa
           </button>
           <div className="text-right glass bg-white/5 px-6 py-3 rounded-[24px] border border-white/10 shadow-xl">
             <div className="text-[10px] text-text-tertiary font-black uppercase tracking-[0.3em] mb-1">Overall Completion</div>
-            <div className="text-4xl font-black text-accent drop-shadow-sm tracking-tighter">{overallPct}%</div>
+            <div className="text-3xl font-black text-accent drop-shadow-sm tracking-tighter">{overallPct}%</div>
           </div>
         </div>
       </header>
@@ -217,20 +217,20 @@ export default function Goals({ goals, addGoal, removeGoal, updateGoalPct }: Goa
             
             <div className="space-y-5">
               {goals.filter(g => g.category === cat).map((g) => (
-                <div key={g.id} className="glass bg-white/5 border border-white/10 rounded-[40px] p-8 group relative transition-all duration-700 hover:bg-white/10 hover:border-white/20 shadow-xl overflow-hidden">
+                <div key={g.id} className="glass bg-white/5 border border-white/10 rounded-[32px] p-6 group relative transition-all duration-700 hover:bg-white/10 hover:border-white/20 shadow-xl overflow-hidden">
                   <div className="absolute -top-16 -right-16 w-32 h-32 bg-white/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                   
                   <div className="flex items-center gap-5 relative z-10">
-                    <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-4xl flex-shrink-0 border border-white/10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
+                    <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-3xl flex-shrink-0 border border-white/10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
                       {g.icon}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-lg font-black truncate tracking-tight text-white drop-shadow-sm">{g.name}</div>
+                      <div className="text-base font-black truncate tracking-tight text-white drop-shadow-sm">{g.name}</div>
                       <div className="text-[10px] text-text-tertiary mt-1.5 truncate font-black uppercase tracking-[0.2em] bg-white/5 px-3 py-1 rounded-full border border-white/5 w-fit">{g.target}</div>
                     </div>
-                    <div className="text-2xl font-black text-accent tracking-tighter drop-shadow-sm">{g.pct}%</div>
+                    <div className="text-xl font-black text-accent tracking-tighter drop-shadow-sm">{g.pct}%</div>
                   </div>
-                  <div className="h-3 bg-white/5 rounded-full mt-8 overflow-hidden relative border border-white/5 p-[1px]">
+                  <div className="h-2.5 bg-white/5 rounded-full mt-6 overflow-hidden relative border border-white/5 p-[1px]">
                     <div className="h-full bg-gradient-to-r from-accent/60 to-accent rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(124,111,247,0.5)]" style={{ width: `${g.pct}%` }} />
                     <input
                       type="range"

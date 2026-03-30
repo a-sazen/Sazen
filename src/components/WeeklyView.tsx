@@ -32,12 +32,20 @@ export default function WeeklyView() {
           return (
             <div 
               key={d} 
-              className={`glass p-4 min-h-[160px] flex flex-col transition-all duration-500 hover:scale-[1.02] group ${
-                isToday ? 'bg-accent/10 border-accent/30 ring-1 ring-accent/20' : isUni ? 'bg-blue-custom/5 border-blue-custom/20' : 'bg-white/5 border-white/10'
+              className={`glass p-4 min-h-[160px] flex flex-col transition-all duration-500 hover:scale-[1.02] group relative overflow-hidden ${
+                isToday 
+                  ? 'bg-accent/20 border-accent/50 ring-2 ring-accent/30 shadow-[0_0_30px_rgba(124,111,247,0.3)]' 
+                  : isUni ? 'bg-blue-custom/5 border-blue-custom/20' : 'bg-white/5 border-white/10'
               }`}
             >
-              <div className={`text-[11px] font-black uppercase tracking-widest mb-4 ${isToday ? 'text-accent' : isUni ? 'text-blue-custom' : 'text-white/30'}`}>
-                {d}{isToday && ' · Today'}
+              {isToday && (
+                <div className="absolute top-0 right-0 w-16 h-16 bg-accent/20 blur-2xl rounded-full -mr-8 -mt-8 animate-pulse" />
+              )}
+              <div className={`text-[11px] font-black uppercase tracking-widest mb-4 flex items-center gap-2 ${isToday ? 'text-accent' : isUni ? 'text-blue-custom' : 'text-white/30'}`}>
+                {d}
+                {isToday && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
+                )}
               </div>
               
               <div className="flex flex-col gap-2">

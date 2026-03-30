@@ -18,7 +18,10 @@ import {
   Dumbbell,
   Wallet,
   Menu,
-  X
+  X,
+  Sun,
+  Moon,
+  Briefcase
 } from 'lucide-react';
 
 import { DAYS, FULL_DAYS, NOTICES, QUOTES, HABITS, GOALS_DATA, TODOS_HOME, TODOS_OUTSIDE, SHOPPING } from './constants';
@@ -38,10 +41,11 @@ import WorkoutLog from './components/WorkoutLog';
 import FinanceTracker from './components/FinanceTracker';
 import { Exam, WorkoutSession, BodyMeasurement, Goal, Habit, Transaction, Account, Budget, SavingsGoal, Todo, ShoppingItem } from './types';
 
-type Page = 'dashboard' | 'today' | 'weekly' | 'schedule' | 'mindfuel' | 'habits' | 'goals' | 'todos' | 'shopping' | 'exams' | 'pomodoro' | 'workout' | 'finance';
+type Page = 'dashboard' | 'today' | 'weekly' | 'schedule' | 'work' | 'habits' | 'goals' | 'todos' | 'shopping' | 'exams' | 'pomodoro' | 'workout' | 'finance';
 
 export default function App() {
   const [activePage, setActivePage] = useState<Page>('dashboard');
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => (localStorage.getItem('theme') as 'dark' | 'light') || 'dark');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [waterCount, setWaterCount] = useState(() => parseInt(localStorage.getItem('water_count') || '0'));
   const [mfDone, setMfDone] = useState<number[]>(() => JSON.parse(localStorage.getItem('mf_done') || '[]'));
@@ -122,7 +126,14 @@ export default function App() {
     localStorage.setItem('todos', JSON.stringify(todos));
     localStorage.setItem('shopping_items', JSON.stringify(shoppingItems));
     localStorage.setItem('completed_tasks', JSON.stringify(completedTasks));
-  }, [waterCount, mfDone, habitDone, todoDone, shopDone, habits, goals, exams, workoutSessions, transactions, accounts, budgets, savingsGoals, bodyMeasurements, todos, shoppingItems, completedTasks]);
+    localStorage.setItem('theme', theme);
+    
+    if (theme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  }, [waterCount, mfDone, habitDone, todoDone, shopDone, habits, goals, exams, workoutSessions, transactions, accounts, budgets, savingsGoals, bodyMeasurements, todos, shoppingItems, completedTasks, theme]);
 
   const toggleWater = (i: number) => {
     setWaterCount(prev => i < prev ? i : i + 1);
@@ -145,7 +156,7 @@ export default function App() {
     { id: 'schedule', label: 'Class Schedule', icon: BookOpen, section: 'Main' },
     { id: 'exams', label: 'Exam Tracker', icon: GraduationCap, section: 'Academic' },
     { id: 'pomodoro', label: 'Study Timer', icon: Timer, section: 'Academic' },
-    { id: 'mindfuel', label: 'Mindfuel Work', icon: Lightbulb, section: 'Work & Goals' },
+    { id: 'work', label: 'Work', icon: Briefcase, section: 'Work & Goals' },
     { id: 'habits', label: 'Habit Tracker', icon: CheckCircle2, section: 'Life' },
     { id: 'goals', label: 'Goals', icon: Target, section: 'Life' },
     { id: 'workout', label: 'Workout Log', icon: Dumbbell, section: 'Life' },
@@ -179,7 +190,7 @@ export default function App() {
       case 'schedule': return <ClassSchedule />;
       case 'exams': return <ExamTracker exams={exams} addExam={e => setExams(prev => [...prev, { ...e, id: Math.random().toString(36).substr(2, 9) }])} removeExam={id => setExams(prev => prev.filter(e => e.id !== id))} />;
       case 'pomodoro': return <Pomodoro />;
-      case 'mindfuel': return <MindfuelWork mfDone={mfDone} toggleMf={(id) => setMfDone(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id])} />;
+      case 'work': return <MindfuelWork mfDone={mfDone} toggleMf={(id) => setMfDone(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id])} />;
       case 'habits': return <HabitTracker habits={habits} habitDone={habitDone} toggleHabit={(hn, date) => setHabitDone(prev => {
         const newHabits = { ...prev };
         if (!newHabits[date]) newHabits[date] = {};
@@ -239,8 +250,8 @@ export default function App() {
   };
 
   return (
-    <div className="flex min-h-screen bg-bg text-text-primary liquid-mesh relative">
-      <Toaster position="top-right" richColors theme="dark" />
+    <div className={`flex min-h-screen bg-bg text-text-primary liquid-mesh relative transition-colors duration-500 ${theme}`}>
+      <Toaster position="top-right" richColors theme={theme} />
       
       {/* Mobile Toggle */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 glass-dark border-b border-white/5 flex items-center justify-between px-6 z-[60]">
@@ -278,6 +289,24 @@ export default function App() {
             MyFlow
           </div>
           <div className="text-[10px] font-bold text-text-tertiary uppercase tracking-[0.3em] mt-1">Daily OS</div>
+        </div>
+
+        <div className="px-6 py-4 border-b border-white/5">
+          <button 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="w-full flex items-center justify-between px-4 py-3 rounded-2xl glass bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
+          >
+            <div className="flex items-center gap-3">
+              {theme === 'dark' ? <Moon size={16} className="text-accent" /> : <Sun size={16} className="text-warning" />}
+              <span className="text-[10px] font-black uppercase tracking-widest text-white/60 group-hover:text-white">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+            </div>
+            <div className={`w-8 h-4 rounded-full relative transition-colors duration-500 ${theme === 'dark' ? 'bg-accent/40' : 'bg-warning/40'}`}>
+              <motion.div 
+                animate={{ x: theme === 'dark' ? 16 : 0 }}
+                className="absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white shadow-sm"
+              />
+            </div>
+          </button>
         </div>
         
         <div className="p-6 border-b border-white/5">
@@ -324,26 +353,6 @@ export default function App() {
             </div>
           ))}
         </nav>
-
-        <div className="p-4 border-t border-white/5">
-          <div className="glass bg-white/5 rounded-[24px] p-4">
-            <div className="text-[10px] text-text-tertiary font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
-              <Droplets size={10} className="text-blue-custom" />
-              Hydration
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => toggleWater(i)}
-                  className={`w-4 h-4 rounded-full border border-white/10 transition-all duration-500 ${
-                    i < waterCount ? 'bg-blue-custom border-blue-custom shadow-[0_0_12px_rgba(74,158,255,0.6)]' : 'bg-white/5'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
       </aside>
 
       {/* Main Content */}
